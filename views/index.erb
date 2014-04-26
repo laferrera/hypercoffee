@@ -2,9 +2,10 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css">          
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>	
 	<script src="js/timeago.js"></script>		
-	<meta name="viewport" content="width=320, initial-scale=1, user-scalable=no"> 
+	<meta name="viewport" content="width=320.1, initial-scale=1, user-scalable=no"> 
 	<link rel="apple-touch-icon" href="meta/apple-touch-icon.png">
 	<meta name="apple-mobile-web-app-capable" content="yes">	
+	<title>HYPERCOFFEE</title>
 </head>
 <body>
 	<div class="content">
@@ -14,14 +15,14 @@
 		<div class="coffeewasmade">
 		COFFEE WAS MADE
 		</div>
-		<div class="coffeeTime">
+		<div class="coffeeTime" onclick="changeTimeMode()">
 			<%= settings.mongo_db['coffeeBrewed'].find.to_a.last['datetime'] %> AGO
 		</div>
 		<div class="coffeeMaker">
 			BY <%= settings.mongo_db['coffeeBrewed'].find.to_a.last['user'] %>
 		</div>		
 		
-		<div class="button" onclick="updateCoffee()">
+		<div id ="justmadecoffee" class="button" onclick="updateCoffee()">
 			I JUST MADE COFFEE
 		</div>
 	</div>
@@ -36,20 +37,50 @@ var updateCoffee = function(){
       type: 'POST',
       data: {datetime: now, user: user},
     });
-	updateDisplay()
+	fetchCoffeeTime()
 }
 
-var updateDisplay = function(){
-	console.log('updating display')
+var fetchCoffeeTime =  function(){
     $.ajax({
       url:'last',
       type: 'get',
 	  success: function(response){
-		  var timeago = jQuery.timeago(parseInt(response.datetime));
-		  $('.coffeeTime').html(timeago);
-		  $('.coffeeMaker').html(response.name);		  
+		  coffeeResponse = response
+		  updateDisplay()
 	  }
     });
+	
+}
+
+var updateDisplay = function(){
+	console.log('updating display')
+	if(timeMode == "words"){
+	  var timeago = jQuery.timeago(parseInt(coffeeResponse.datetime));
+	  $('.coffeeTime').html(timeago);		  	
+	} else {
+		// var now = new Date().getTime();
+		// var milliseconds = now - parseInt(coffeeResponse.datetime);
+		// var seconds = milliseconds / 1000
+		// var hours = seconds / 60 / 60
+		
+		var  dateNow = parseInt(coffeeResponse.datetime)
+		var dateFuture = new Date().getTime();
+
+		var seconds = Math.floor((dateFuture - (dateNow))/1000);
+		var minutes = Math.floor(seconds/60);
+		var hours = Math.floor(minutes/60);
+		var days = Math.floor(hours/24);
+
+		hours = hours-(days*24);
+		minutes = minutes-(days*24*60)-(hours*60);
+		seconds = seconds-(days*24*60*60)-(hours*60*60)-(minutes*60);
+		
+		var string = hours + 'H:' + minutes + 'M:' + seconds + 'S'
+		
+		
+		$('.coffeeTime').html(string);	
+	}
+    $('.coffeeMaker').html(coffeeResponse.name);		  
 }
 
 var setName = function(){
@@ -77,11 +108,23 @@ var showModal = function(){
 	$('body').append('<div id="overlay"><div id="modal"><input type="text" id="name" placeholder="NAME"><input type="submit" value="GO" class="button" onclick="setName()"></div></div>');
 }
 
+var changeTimeMode = function (){
+	if(timeMode === "words"){ 
+		timeMode = "time" 
+	}else { 
+		timeMode = "words"	
+	}
+}
+
 var init = function (){
 	checkName();
-	updateDisplay();
-	 setInterval(updateDisplay,5000);
+	fetchCoffeeTime();
+	setInterval(updateDisplay,50);
 }
+
+var coffeeResponse = {dateTime:0,name:'somebody'};
+
+var timeMode = "words"
 
 $( document ).ready(
 	init()
