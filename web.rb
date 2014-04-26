@@ -10,7 +10,7 @@ configure do
      # uri = URI.parse(ENV['MONGOHQ_URL'])
      # config.master = conn.db(uri.path.gsub(/^\//, ''))
      set :mongo_connection, conn
-     set :mongo_db, conn.db('test')     
+     set :mongo_db, conn.db(uri.path.gsub(/^\//, ''))     
  else
     conn = MongoClient.new("localhost", 27017)
     set :mongo_connection, conn
