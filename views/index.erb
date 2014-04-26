@@ -1,0 +1,89 @@
+<head>
+	<link rel="stylesheet" type="text/css" href="css/main.css">          
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>	
+	<script src="js/timeago.js"></script>		
+	<meta name="viewport" content="width=320, initial-scale=1, user-scalable=no"> 
+</head>
+<body>
+	<div class="content">
+		<div class="hhnyc">
+		HYPERHYPER NYC 
+		</div>
+		<div class="coffeewasmade">
+		COFFEE WAS MADE
+		</div>
+		<div class="coffeeTime">
+			<%= settings.mongo_db['coffeeBrewed'].find.to_a.last['datetime'] %> AGO
+		</div>
+		<div class="coffeeMaker">
+			BY <%= settings.mongo_db['coffeeBrewed'].find.to_a.last['user'] %>
+		</div>		
+		
+		<div class="button" onclick="updateCoffee()">
+			I JUST MADE COFFEE
+		</div>
+	</div>
+</body>
+<script>
+
+var updateCoffee = function(){
+	var now = new Date().getTime();
+	var user = localStorage.getItem("name") || "dingus"
+    $.ajax({
+      url:'update_coffee',
+      type: 'POST',
+      data: {datetime: now, user: user},
+    });
+	updateDisplay()
+}
+
+var updateDisplay = function(){
+	console.log('updating display')
+    $.ajax({
+      url:'last',
+      type: 'get',
+	  success: function(response){
+		  var timeago = jQuery.timeago(parseInt(response.datetime));
+		  $('.coffeeTime').html(timeago);
+		  $('.coffeeMaker').html(response.name);		  
+	  }
+    });
+}
+
+var setName = function(){
+	if ($('#name')[0].value !== ""){
+		var name = $('#name')[0].value
+		localStorage.setItem("name", name);		
+	}
+	hideModal();
+}
+
+var checkName =function (){
+	if(localStorage.getItem("name") == null){
+		console.log('we ain\' got a name')
+		showModal();		
+	} else {
+		console.log('we got a name')
+	}
+}
+
+var hideModal = function(){
+  $('#overlay').remove()
+}
+
+var showModal = function(){
+	$('body').append('<div id="overlay"><div id="modal"><input type="text" id="name" placeholder="NAME"><input type="submit" value="GO" class="button" onclick="setName()"></div></div>');
+}
+
+var init = function (){
+	checkName();
+	updateDisplay();
+	 setInterval(updateDisplay,5000);
+}
+
+$( document ).ready(
+	init()
+)
+
+
+</script>
