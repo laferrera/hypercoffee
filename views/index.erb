@@ -56,7 +56,7 @@ var fetchCoffeeTime =  function(){
 
 var updateDisplay = function(){
 	console.log('updating display')
-    $('.coffeeMaker').html(coffeeResponse.user);	
+    $('.coffeeMaker').html('BY ' + coffeeResponse.user);	
 	if(timeMode == "words"){
 	  var timeago = jQuery.timeago(parseInt(coffeeResponse.datetime));
 	  $('.coffeeTime').html(timeago);		  	
