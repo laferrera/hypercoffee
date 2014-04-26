@@ -36,17 +36,19 @@ var updateCoffee = function(){
       url:'update_coffee',
       type: 'POST',
       data: {datetime: now, user: user},
+	  success: function(response){
+		  coffeeResponse = {datetime: parseInt(now) ,name:user};
+	  }
     });
-	fetchCoffeeTime()
 }
 
 var fetchCoffeeTime =  function(){
+	console.log('fetching coffee time')
     $.ajax({
       url:'last',
       type: 'get',
 	  success: function(response){
 		  coffeeResponse = response
-		  updateDisplay()
 	  }
     });
 	
@@ -54,33 +56,24 @@ var fetchCoffeeTime =  function(){
 
 var updateDisplay = function(){
 	console.log('updating display')
+    $('.coffeeMaker').html(coffeeResponse.user);	
 	if(timeMode == "words"){
 	  var timeago = jQuery.timeago(parseInt(coffeeResponse.datetime));
 	  $('.coffeeTime').html(timeago);		  	
 	} else {
-		// var now = new Date().getTime();
-		// var milliseconds = now - parseInt(coffeeResponse.datetime);
-		// var seconds = milliseconds / 1000
-		// var hours = seconds / 60 / 60
-		
 		var  dateNow = parseInt(coffeeResponse.datetime)
 		var dateFuture = new Date().getTime();
-
 		var seconds = Math.floor((dateFuture - (dateNow))/1000);
 		var minutes = Math.floor(seconds/60);
 		var hours = Math.floor(minutes/60);
 		var days = Math.floor(hours/24);
-
 		hours = hours-(days*24);
 		minutes = minutes-(days*24*60)-(hours*60);
 		seconds = seconds-(days*24*60*60)-(hours*60*60)-(minutes*60);
-		
 		var string = hours + 'H:' + minutes + 'M:' + seconds + 'S'
-		
-		
 		$('.coffeeTime').html(string);	
 	}
-    $('.coffeeMaker').html(coffeeResponse.name);		  
+
 }
 
 var setName = function(){
@@ -120,9 +113,11 @@ var init = function (){
 	checkName();
 	fetchCoffeeTime();
 	setInterval(updateDisplay,50);
+	setInterval(fetchCoffeeTime,1000);	
+
 }
 
-var coffeeResponse = {dateTime:0,name:'somebody'};
+var coffeeResponse = {dateTime:0,user:'somebody'};
 
 var timeMode = "words"
 

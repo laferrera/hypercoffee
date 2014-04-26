@@ -26,7 +26,7 @@ post '/update_coffee' do
   puts params  
   content_type :json
   new_id = settings.mongo_db['coffeeBrewed'].insert params
-  status 200 
+  settings.mongo_db['coffeeBrewed'].find.to_a.last.to_json
 end
 
 get '/documents/?' do
