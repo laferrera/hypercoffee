@@ -70,6 +70,10 @@ var updateDisplay = function(){
 		hours = hours-(days*24);
 		minutes = minutes-(days*24*60)-(hours*60);
 		seconds = seconds-(days*24*60*60)-(hours*60*60)-(minutes*60);
+		hours = paddy(hours, 2)
+		minutes = paddy(minutes, 2)
+		seconds = paddy(seconds, 2)
+		
 		var string = hours + 'H:' + minutes + 'M:' + seconds + 'S AGO'
 		$('.coffeeTime').html(string);	
 	}
@@ -107,6 +111,12 @@ var changeTimeMode = function (){
 	}else { 
 		timeMode = "words"	
 	}
+}
+
+var paddy = function(n, p, c) {
+    var pad_char = typeof c !== 'undefined' ? c : '0';
+    var pad = new Array(1 + p).join(pad_char);
+    return (pad + n).slice(-pad.length);
 }
 
 var init = function (){
