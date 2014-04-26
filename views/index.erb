@@ -37,7 +37,7 @@ var updateCoffee = function(){
       type: 'POST',
       data: {datetime: now, user: user},
 	  success: function(response){
-		  coffeeResponse = {datetime: parseInt(now) ,name:user};
+		  coffeeResponse = {datetime: parseInt(now) ,user:user};
 	  }
     });
 }
