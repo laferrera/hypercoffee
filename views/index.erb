@@ -37,6 +37,7 @@
 var updateCoffee = function(){
 	var now = new Date().getTime();
 	var user = localStorage.getItem("name") || "dingus"
+	var user = user.toLowerCase()
     $.ajax({
       url:'update_coffee',
       type: 'POST',

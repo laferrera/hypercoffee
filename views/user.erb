@@ -1,0 +1,25 @@
+<head>
+	<link rel="stylesheet" type="text/css" href="css/main.css">          
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>	
+	<script src="js/timeago.js"></script>		
+	<meta name="viewport" content="width=320.1, initial-scale=1, user-scalable=no"> 
+	<link rel="apple-touch-icon" href="meta/apple-touch-icon.png">
+	<meta name="apple-mobile-web-app-capable" content="yes">	
+	<title>HYPERCOFFEE</title>
+</head>
+<body>
+	<div class="content">
+		  <% settings.mongo_db['coffeeBrewed'].find(:user => params[:user]).to_a.each do |coffee| %>
+		  <div class="usercoffee">
+			  <%= coffee['user'] %>
+			  <%= Time.at( coffee['datetime'].to_i / 1000).strftime("%H:%M:%S %a %b %d %Y") %>			  
+		  </div>
+		  <% end %>
+		
+		<a href="/">
+		<div id ="justmadecoffee" class="button" onclick="updateCoffee()">
+			BACK
+		</div>
+		</a>
+	</div>
+</body>
