@@ -21,12 +21,11 @@
 		<div>
 			BY
 		</div>
-		<a href="/user?user=<%= settings.mongo_db['coffeeBrewed'].find.to_a.last['user'] %>">
+		<a href="/user?user=<%= settings.mongo_db['coffeeBrewed'].find.to_a.last['user'] %>">						
 			<div class="coffeeMaker">
-				 <%= settings.mongo_db['coffeeBrewed'].find.to_a.last['user'] %>
+					 <%= settings.mongo_db['coffeeBrewed'].find.to_a.last['user'] %>
 			</div>		
-		</a>
-		
+		</a>					 			
 		<div id ="justmadecoffee" class="button" onclick="updateCoffee()">
 			I JUST MADE COFFEE
 		</div>

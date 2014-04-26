@@ -12,7 +12,7 @@
 		  <% settings.mongo_db['coffeeBrewed'].find(:user => params[:user]).to_a.each do |coffee| %>
 		  <div class="usercoffee">
 			  <%= coffee['user'] %>
-			  <%= Time.at( coffee['datetime'].to_i / 1000).strftime("%H:%M:%S %a %b %d %Y") %>			  
+			  <%= Time.at( coffee['datetime'].to_i / 1000).localtime.getlocal("-04:00").strftime("%H:%M:%S %a %b %d %Y") %>			  
 		  </div>
 		  <% end %>
 		
