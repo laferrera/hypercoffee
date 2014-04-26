@@ -5,9 +5,15 @@ require 'json/ext' # required for .to_json
 include Mongo
 
 configure do
-  conn = MongoClient.new("localhost", 27017)
-  set :mongo_connection, conn
-  set :mongo_db, conn.db('test')
+  if ENV['MONGOHQ_URL']
+     conn = Mongo::Connection.from_uri(ENV['MONGOHQ_URL'])
+     uri = URI.parse(ENV['MONGOHQ_URL'])
+     config.master = conn.db(uri.path.gsub(/^\//, ''))
+ else
+    conn = MongoClient.new("localhost", 27017)
+    set :mongo_connection, conn
+    set :mongo_db, conn.db('test')
+  end
 end
 
 get '/' do
