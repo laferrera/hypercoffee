@@ -39,4 +39,8 @@ get '/last/?' do
   settings.mongo_db['coffeeBrewed'].find.to_a.last.to_json
 end
 
+get '/user/?' do
+  erb :user
+end
+
 set :public_folder, File.dirname(__FILE__) + '/static'

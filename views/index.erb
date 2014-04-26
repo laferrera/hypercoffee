@@ -18,9 +18,14 @@
 		<div class="coffeeTime" onclick="changeTimeMode()">
 			<%= settings.mongo_db['coffeeBrewed'].find.to_a.last['datetime'] %> AGO
 		</div>
-		<div class="coffeeMaker">
-			BY <%= settings.mongo_db['coffeeBrewed'].find.to_a.last['user'] %>
-		</div>		
+		<div>
+			BY
+		</div>
+		<a href="/user?user=<%= settings.mongo_db['coffeeBrewed'].find.to_a.last['user'] %>">
+			<div class="coffeeMaker">
+				 <%= settings.mongo_db['coffeeBrewed'].find.to_a.last['user'] %>
+			</div>		
+		</a>
 		
 		<div id ="justmadecoffee" class="button" onclick="updateCoffee()">
 			I JUST MADE COFFEE
@@ -56,7 +61,7 @@ var fetchCoffeeTime =  function(){
 
 var updateDisplay = function(){
 	console.log('updating display')
-    $('.coffeeMaker').html('BY ' + coffeeResponse.user);	
+    $('.coffeeMaker').html(coffeeResponse.user);	
 	if(timeMode == "words"){
 	  var timeago = jQuery.timeago(parseInt(coffeeResponse.datetime));
 	  $('.coffeeTime').html(timeago);		  	
