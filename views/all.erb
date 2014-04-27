@@ -10,7 +10,7 @@
 <body>
 	<div class="content">
 	  <div class ="usercofeecontainer">		
-		  <% settings.mongo_db['coffeeBrewed'].find(:user => params[:user]).sort(:datetime => -1).to_a.each do |coffee| %>
+		  <% settings.mongo_db['coffeeBrewed'].find.sort(:datetime => -1).to_a.each do |coffee| %>
 		  <div class="usercoffee">
 			  <%= coffee['user'] %><br>
 			  <%= Time.at( coffee['datetime'].to_i / 1000).localtime.getlocal("-04:00").strftime("%H:%M:%S") %><br>			  

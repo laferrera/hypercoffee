@@ -43,4 +43,8 @@ get '/user/?' do
   erb :user
 end
 
+get '/all' do
+  erb :all
+end
+
 set :public_folder, File.dirname(__FILE__) + '/static'
