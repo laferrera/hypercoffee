@@ -39,7 +39,7 @@ get '/last/?' do
   settings.mongo_db['coffeeBrewed'].find.to_a.last.to_json
 end
 
-get '/user/?'
+get '/user/?' do
   erb :user
 end
 
